@@ -5,39 +5,8 @@
     {{ end }}
   {{ end }}
 
-  {{ partial "header/components/translations.html" . }}
   {{ if .Site.Params.enableA11y | default false }}
     {{ partial "header/components/a11y.html" (dict "prefix" "desktop-") }}
-  {{ end }}
-
-  {{ if .Site.Params.enableSearch | default false }}
-    <button
-      id="search-button"
-      aria-label="Search"
-      class="text-base bf-icon-color-hover"
-      title="{{ i18n "search.open_button_title" }}">
-      {{ partial "icon.html" "search" }}
-    </button>
-  {{ end }}
-
-  {{ if .Site.Params.footer.showAppearanceSwitcher | default false }}
-    <div class="flex items-center">
-      <button
-        id="appearance-switcher"
-        aria-label="Dark mode switcher"
-        type="button"
-        class="text-base bf-icon-color-hover">
-        <div class="appearance-icon appearance-icon-light items-center justify-center">
-          {{ partial "icon.html" "sun" }}
-        </div>
-        <div class="appearance-icon appearance-icon-dark items-center justify-center">
-          {{ partial "icon.html" "moon" }}
-        </div>
-        <div class="appearance-icon appearance-icon-auto items-center justify-center">
-          {{ partial "icon.html" "auto" }}
-        </div>
-      </button>
-    </div>
   {{ end }}
 </nav>
 
@@ -55,14 +24,13 @@
             tabindex="0"
           {{ end }}
           {{ with or .Name .Pre }}aria-label="{{ . }}"{{ end }}
-          class="flex items-center text-base font-medium bf-icon-color-hover"
-          title="{{ .Title }}">
+          class="flex items-center text-base font-medium bf-icon-color-hover">
           {{ if .Pre }}
             <span {{ if and .Pre .Name }}class="mr-1"{{ end }}>
               {{ partial "icon.html" .Pre }}
             </span>
           {{ end }}
-          <span class="text-bg font-bg break-normal" title="{{ .Title }}">
+          <span class="text-bg font-bg break-normal">
             {{ .Name | markdownify }}
           </span>
           <span>
@@ -86,7 +54,7 @@
                     {{ partial "icon.html" .Pre }}
                   </span>
                 {{ end }}
-                <span class="text-sm font-sm" title="{{ .Title }}">
+                <span class="text-sm font-sm">
                   {{ .Name | markdownify }}
                 </span>
               </a>
@@ -102,8 +70,7 @@
         target="_blank"
       {{ end }}
       class="flex items-center bf-icon-color-hover"
-      {{ with or .Name .Pre }}aria-label="{{ . }}"{{ end }}
-      title="{{ .Title }}">
+      {{ with or .Name .Pre }}aria-label="{{ . }}"{{ end }}>
       {{ if .Pre }}
         <span {{ if and .Pre .Name }}class="mr-1"{{ end }}>
           {{ partial "icon.html" .Pre }}

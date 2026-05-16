@@ -1,30 +1,9 @@
 <div class="flex items-center h-14 gap-4">
-  {{ if .Site.Params.enableSearch | default false }}
-    <button
-      id="search-button-mobile"
-      aria-label="Search"
-      class="flex items-center justify-center bf-icon-color-hover"
-      title="{{ i18n "search.open_button_title" }}">
-      {{ partial "icon.html" "search" }}
-    </button>
-  {{ end }}
-
   {{ if .Site.Params.footer.showAppearanceSwitcher | default false }}
-    <button
-      id="appearance-switcher-mobile"
-      type="button"
-      aria-label="Dark mode switcher"
-      class="flex items-center justify-center text-neutral-900 hover:text-primary-600 dark:text-neutral-200 dark:hover:text-primary-400">
-      <div class="appearance-icon appearance-icon-light">
-        {{ partial "icon.html" "sun" }}
-      </div>
-      <div class="appearance-icon appearance-icon-dark">
-        {{ partial "icon.html" "moon" }}
-      </div>
-      <div class="appearance-icon appearance-icon-auto">
-        {{ partial "icon.html" "auto" }}
-      </div>
-    </button>
+    {{ partial "header/components/appearance-switcher.html" (dict
+      "idSuffix" "-mobile"
+      "class" "flex items-center justify-center text-neutral-900 hover:text-primary-600 dark:text-neutral-200 dark:hover:text-primary-400")
+    }}
   {{ end }}
 
   {{ if or

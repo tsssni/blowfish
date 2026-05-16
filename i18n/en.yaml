@@ -1,5 +1,5 @@
 global:
-  language: "EN"
+  language: "English"
 
 article:
   anchor_label: "Anchor"

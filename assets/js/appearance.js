@@ -1,7 +1,9 @@
 const sitePreference = document.documentElement.getAttribute("data-default-appearance");
 const autoEnabled = document.documentElement.getAttribute("data-auto-appearance") === "true";
+const switcherEnabled = {{ if .Site.Params.footer.showAppearanceSwitcher | default false }}true{{ else }}false{{ end }};
 
 const getAppearance = () => {
+  if (!switcherEnabled) return "auto";
   const stored = localStorage.getItem("appearance");
   return stored === "light" || stored === "dark" ? stored : "auto";
 };

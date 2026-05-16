@@ -1,4 +1,4 @@
-<div class="main-menu flex items-center w-full gap-2 p-1 pl-0">
+<div class="main-menu flex items-center w-full gap-3 p-1 pl-0">
   {{ if .Site.Params.Logo }}
     {{ $logo := resources.Get .Site.Params.Logo }}
     {{ if $logo }}
@@ -22,10 +22,24 @@
     {{ end }}
   {{ end }}
   {{ if not .Site.Params.disableTextInHeader | default true }}
-    <a href="{{ "" | relLangURL }}" class="text-base font-medium truncate min-w-0 shrink">
+    <a href="{{ "" | relLangURL }}" class="text-base font-bold truncate min-w-0 shrink">
       {{ .Site.Title | markdownify }}
     </a>
   {{ end }}
+
+  {{/* Desktop left-side controls: appearance + | + language */}}
+  <div class="hidden md:flex items-center gap-3">
+    {{ if .Site.Params.footer.showAppearanceSwitcher | default false }}
+      {{ partial "header/components/appearance-switcher.html" (dict) }}
+    {{ end }}
+    {{ if .IsTranslated }}
+      {{ if .Site.Params.footer.showAppearanceSwitcher | default false }}
+        <span class="text-neutral-400 dark:text-neutral-500 select-none" aria-hidden="true">|</span>
+      {{ end }}
+      {{ partial "header/components/translations.html" . }}
+    {{ end }}
+  </div>
+
   <div class="flex items-center ms-auto">
     <div class="hidden md:flex">
       {{ partial "header/components/desktop-menu.html" . }}

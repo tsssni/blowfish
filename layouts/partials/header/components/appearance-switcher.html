@@ -1,0 +1,17 @@
+{{ $idSuffix := .idSuffix | default "" }}
+{{ $class := .class | default "inline-flex items-center justify-center text-base bf-icon-color-hover" }}
+<button
+  id="appearance-switcher{{ $idSuffix }}"
+  aria-label="Dark mode switcher"
+  type="button"
+  class="{{ $class }}">
+  <div class="appearance-icon appearance-icon-light items-center justify-center">
+    {{ partial "icon.html" "sun" }}
+  </div>
+  <div class="appearance-icon appearance-icon-dark items-center justify-center">
+    {{ partial "icon.html" "moon" }}
+  </div>
+  <div class="appearance-icon appearance-icon-auto items-center justify-center">
+    {{ partial "icon.html" "auto" }}
+  </div>
+</button>

@@ -66,9 +66,11 @@
                 data-zoom-src="{{ $squareImage.RelPermalink }}">
             {{ end }}
           {{ end }}
-          <h1 class="mb-2 text-4xl font-extrabold text-neutral-800 dark:text-neutral-200">
-            {{ .Site.Params.Author.name | default .Site.Title }}
-          </h1>
+          {{ if .Site.Params.homepage.showTitle | default true }}
+            <h1 class="mb-2 text-4xl font-extrabold text-neutral-800 dark:text-neutral-200">
+              {{ .Site.Params.Author.name | default .Site.Title }}
+            </h1>
+          {{ end }}
           {{ with .Site.Params.Author.headline }}
             <h2 class="mt-0 mb-0 text-xl text-neutral-800 dark:text-neutral-300">
               {{ . | markdownify }}
