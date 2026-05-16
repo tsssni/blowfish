@@ -192,6 +192,11 @@
       data-copied="{{ i18n "code.copied" }}"></script>
   {{ end }}
 
+  {{ if .Site.Params.enableShiki | default false }}
+    {{ $shiki := resources.Get "js/shiki.js" | resources.ExecuteAsTemplate "js/shiki.js" . | resources.Fingerprint $alg }}
+    <script type="module" src="{{ $shiki.RelPermalink }}" integrity="{{ $shiki.Data.Integrity }}"></script>
+  {{ end }}
+
   {{/* Conditional loaded resources */}}
   {{ partial "vendor.html" . }}
 

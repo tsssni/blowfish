@@ -14,6 +14,7 @@ enableSearch = true
 enableCodeCopy = true
 enableStructuredBreadcrumbs = true
 enableVimKeys = false
+enableShiki = false
 
 replyByEmail = false
 
