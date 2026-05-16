@@ -3,7 +3,3 @@
 extended = true
 min = "0.158.0"
 max = "0.161.1"
-
-[params.shikiTheme]
-light = "light-plus"
-dark = "dark-plus"
