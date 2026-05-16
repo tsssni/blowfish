@@ -27,11 +27,14 @@
         aria-label="Dark mode switcher"
         type="button"
         class="text-base bf-icon-color-hover">
-        <div class="flex items-center justify-center dark:hidden">
+        <div class="appearance-icon appearance-icon-light items-center justify-center">
+          {{ partial "icon.html" "sun" }}
+        </div>
+        <div class="appearance-icon appearance-icon-dark items-center justify-center">
           {{ partial "icon.html" "moon" }}
         </div>
-        <div class="items-center justify-center hidden dark:flex">
-          {{ partial "icon.html" "sun" }}
+        <div class="appearance-icon appearance-icon-auto items-center justify-center">
+          {{ partial "icon.html" "auto" }}
         </div>
       </button>
     </div>

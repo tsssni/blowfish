@@ -1,24 +1,42 @@
 const sitePreference = document.documentElement.getAttribute("data-default-appearance");
-const userPreference = localStorage.getItem("appearance");
+const autoEnabled = document.documentElement.getAttribute("data-auto-appearance") === "true";
 
-if ((sitePreference === "dark" && userPreference === null) || userPreference === "dark") {
-  document.documentElement.classList.add("dark");
-}
+const getAppearance = () => {
+  const stored = localStorage.getItem("appearance");
+  return stored === "light" || stored === "dark" ? stored : "auto";
+};
 
-if (document.documentElement.getAttribute("data-auto-appearance") === "true") {
-  if (
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches &&
-    userPreference !== "light"
-  ) {
-    document.documentElement.classList.add("dark");
+const resolveDark = (mode) => {
+  if (mode === "dark") return true;
+  if (mode === "light") return false;
+  if (autoEnabled && window.matchMedia) {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
   }
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
-    if (event.matches) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+  return sitePreference === "dark";
+};
+
+const applyAppearance = (mode) => {
+  document.documentElement.setAttribute("data-appearance", mode);
+  document.documentElement.classList.toggle("dark", resolveDark(mode));
+};
+
+applyAppearance(getAppearance());
+
+(() => {
+  const style = document.createElement("style");
+  style.textContent = `
+    .appearance-icon { display: none; }
+    .appearance-icon svg { height: 1em; width: 1em; }
+    html[data-appearance="light"] .appearance-icon-light,
+    html[data-appearance="dark"] .appearance-icon-dark,
+    html[data-appearance="auto"] .appearance-icon-auto { display: flex; }
+  `;
+  document.head.appendChild(style);
+})();
+
+if (autoEnabled && window.matchMedia) {
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if (getAppearance() === "auto") applyAppearance("auto");
   });
 }
 
@@ -51,48 +69,29 @@ var updateMermaidTheme = () => {
 }
 
 window.addEventListener("DOMContentLoaded", (event) => {
-  const switcher = document.getElementById("appearance-switcher");
-  const switcherMobile = document.getElementById("appearance-switcher-mobile");
-
   updateMeta();
   this.updateLogo?.(getTargetAppearance());
 
   // Initialize mermaid theme on page load
   updateMermaidTheme();
 
-  if (switcher) {
-    switcher.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      var targetAppearance = getTargetAppearance();
-      localStorage.setItem(
-        "appearance",
-        targetAppearance
-      );
-      updateMeta();
-      updateMermaidTheme();
-      this.updateLogo?.(targetAppearance);
-    });
-    switcher.addEventListener("contextmenu", (event) => {
-      event.preventDefault();
+  const cycle = (cur) => cur === "light" ? "dark" : cur === "dark" ? "auto" : "light";
+  const onSwitch = () => {
+    const next = cycle(getAppearance());
+    if (next === "auto") {
       localStorage.removeItem("appearance");
-    });
-  }
-  if (switcherMobile) {
-    switcherMobile.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      var targetAppearance = getTargetAppearance();
-      localStorage.setItem(
-        "appearance",
-        targetAppearance
-      );
-      updateMeta();
-      updateMermaidTheme();
-      this.updateLogo?.(targetAppearance);
-    });
-    switcherMobile.addEventListener("contextmenu", (event) => {
-      event.preventDefault();
-      localStorage.removeItem("appearance");
-    });
+    } else {
+      localStorage.setItem("appearance", next);
+    }
+    applyAppearance(next);
+    updateMeta();
+    updateMermaidTheme();
+    this.updateLogo?.(getTargetAppearance());
+  };
+
+  for (const id of ["appearance-switcher", "appearance-switcher-mobile"]) {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener("click", onSwitch);
   }
 });
 
@@ -111,8 +110,8 @@ var updateMeta = () => {
 var updateLogo = (targetAppearance) => {
   var imgElems = document.querySelectorAll("img.logo");
   var logoContainers = document.querySelectorAll("span.logo");
-  
-  targetLogoPath = 
+
+  targetLogoPath =
     targetAppearance == "{{ .Site.Params.DefaultAppearance }}" ?
     "{{ $primaryLogo.RelPermalink }}" : "{{ $secondaryLogo.RelPermalink }}"
   for (const elem of imgElems) {
@@ -120,7 +119,7 @@ var updateLogo = (targetAppearance) => {
   }
 
   {{ if eq $primaryLogo.MediaType.SubType "svg" }}
-  targetContent = 
+  targetContent =
     targetAppearance == "{{ .Site.Params.DefaultAppearance }}" ?
     `{{ $primaryLogo.Content | safeHTML }}` : `{{ $secondaryLogo.Content | safeHTML }}`
   for (const container of logoContainers) {

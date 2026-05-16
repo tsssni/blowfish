@@ -15,11 +15,14 @@
       type="button"
       aria-label="Dark mode switcher"
       class="flex items-center justify-center text-neutral-900 hover:text-primary-600 dark:text-neutral-200 dark:hover:text-primary-400">
-      <div class="dark:hidden">
+      <div class="appearance-icon appearance-icon-light">
+        {{ partial "icon.html" "sun" }}
+      </div>
+      <div class="appearance-icon appearance-icon-dark">
         {{ partial "icon.html" "moon" }}
       </div>
-      <div class="hidden dark:block">
-        {{ partial "icon.html" "sun" }}
+      <div class="appearance-icon appearance-icon-auto">
+        {{ partial "icon.html" "auto" }}
       </div>
     </button>
   {{ end }}
