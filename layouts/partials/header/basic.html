@@ -32,12 +32,10 @@
     {{ if .Site.Params.footer.showAppearanceSwitcher | default false }}
       {{ partial "header/components/appearance-switcher.html" (dict) }}
     {{ end }}
-    {{ if .IsTranslated }}
-      {{ if .Site.Params.footer.showAppearanceSwitcher | default false }}
-        <span class="text-neutral-400 dark:text-neutral-500 select-none" aria-hidden="true">|</span>
-      {{ end }}
-      {{ partial "header/components/translations.html" . }}
+    {{ if .Site.Params.footer.showAppearanceSwitcher | default false }}
+      <span class="text-neutral-400 dark:text-neutral-500 select-none" aria-hidden="true">|</span>
     {{ end }}
+    {{ partial "header/components/translations.html" . }}
   </div>
 
   <div class="flex items-center ms-auto">

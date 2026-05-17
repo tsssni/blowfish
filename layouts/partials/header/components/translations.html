@@ -1,32 +1,34 @@
-{{ if .IsTranslated }}
-  <div class="translation nested-menu">
-    <button class="cursor-pointer flex items-center">
-      <span class="text-base font-medium bf-icon-color-hover">
-        {{- i18n "global.language" | markdownify -}}
-      </span>
-    </button>
-    <ul class="menuhide">
-      <li class="rounded-xl backdrop-blur shadow-2xl p-2 flex flex-col gap-1">
-        {{ range .AllTranslations }}
-          {{ $lang := .Language.Lang }}
-          {{ $parts := split $lang "-" }}
-          {{ $normalized := index $parts 0 }}
-          {{ if eq (len $parts) 2 }}
-            {{ $normalized = printf "%s-%s" $normalized (upper (index $parts 1)) }}
-          {{ end }}
-          {{ $path := printf "themes/blowfish/i18n/%s.yaml" $normalized }}
-          {{ $name := $lang }}
-          {{ if os.FileExists $path }}
-            {{ $data := $path | os.ReadFile | transform.Unmarshal }}
-            {{ $name = index $data "global" "language" | default $lang }}
-          {{ end }}
-          <a href="{{ .RelPermalink }}" class="flex items-center bf-icon-color-hover px-3 py-1">
-            <span class="text-sm font-sm">
-              {{ $name }}
-            </span>
-          </a>
+<div class="translation nested-menu">
+  <button class="cursor-pointer flex items-center">
+    <span class="text-base font-medium bf-icon-color-hover">
+      {{- i18n "global.language" | markdownify -}}
+    </span>
+  </button>
+  <ul class="menuhide">
+    <li class="rounded-xl backdrop-blur shadow-2xl p-2 flex flex-col gap-1">
+      {{ $pages := .AllTranslations }}
+      {{ if not $pages }}
+        {{ $pages = slice . }}
+      {{ end }}
+      {{ range $pages }}
+        {{ $lang := .Language.Lang }}
+        {{ $parts := split $lang "-" }}
+        {{ $normalized := index $parts 0 }}
+        {{ if eq (len $parts) 2 }}
+          {{ $normalized = printf "%s-%s" $normalized (upper (index $parts 1)) }}
         {{ end }}
-      </li>
-    </ul>
-  </div>
-{{ end }}
+        {{ $path := printf "themes/blowfish/i18n/%s.yaml" $normalized }}
+        {{ $name := $lang }}
+        {{ if os.FileExists $path }}
+          {{ $data := $path | os.ReadFile | transform.Unmarshal }}
+          {{ $name = index $data "global" "language" | default $lang }}
+        {{ end }}
+        <a href="{{ .RelPermalink }}" class="flex items-center bf-icon-color-hover px-3 py-1">
+          <span class="text-sm font-sm">
+            {{ $name }}
+          </span>
+        </a>
+      {{ end }}
+    </li>
+  </ul>
+</div>
