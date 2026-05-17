@@ -1,3 +1,12 @@
+{{- $toc := printf "%s" .TableOfContents -}}
+{{- range $match := findRE `\$[^$\n]+\$` $toc -}}
+  {{- $expr := substr $match 1 -1 -}}
+  {{- with try (transform.ToMath $expr (dict "output" "htmlAndMathml")) -}}
+    {{- if not .Err -}}
+      {{- $toc = replace $toc $match (printf "%s" .Value) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
 <details
   open
   id="TOCView"
@@ -8,7 +17,7 @@
   </summary>
   <div
     class="min-w-[220px] py-2 border-dotted border-s-1 -ms-5 ps-5 dark:border-neutral-600">
-    {{ .TableOfContents | emojify }}
+    {{ $toc | emojify | safeHTML }}
   </div>
 </details>
 <details class="toc-inside mt-0 overflow-hidden rounded-lg -ms-5 ps-5 lg:hidden">
@@ -18,7 +27,7 @@
   </summary>
   <div
     class="py-2 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
-    {{ .TableOfContents | emojify }}
+    {{ $toc | emojify | safeHTML }}
   </div>
 </details>
 
