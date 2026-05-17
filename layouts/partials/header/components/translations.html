@@ -5,7 +5,7 @@
     </span>
   </button>
   <ul class="menuhide">
-    <li class="rounded-xl backdrop-blur shadow-2xl p-2 flex flex-col gap-1">
+    <li class="rounded-xl shadow-2xl p-2 flex flex-col gap-1 bg-neutral dark:bg-neutral-800">
       {{ $pages := .AllTranslations }}
       {{ if not $pages }}
         {{ $pages = slice . }}

@@ -99,10 +99,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 
 var updateMeta = () => {
-  var elem, style;
-  elem = document.querySelector('body');
-  style = getComputedStyle(elem);
-  document.querySelector('meta[name="theme-color"]').setAttribute('content', style.backgroundColor);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) return;
+  var style = getComputedStyle(document.querySelector('body'));
+  meta.setAttribute('content', style.backgroundColor);
 }
 
 {{ if and (.Site.Params.Logo) (.Site.Params.SecondaryLogo) }}
